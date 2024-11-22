@@ -375,18 +375,8 @@ install(DIRECTORY man/
 set(WANT_SYSTEMD false CACHE BOOL "Install znc.service to systemd")
 if(WANT_SYSTEMD)
 	configure_file("znc.service.in" "znc.service")
-	set(SYSTEMD_DIR "" CACHE PATH "Path to systemd units")
-	if(SYSTEMD_DIR STREQUAL "" AND PKG_CONFIG_EXECUTABLE)
-		execute_process(COMMAND "${PKG_CONFIG_EXECUTABLE}"
-			--variable=systemdsystemunitdir systemd
-			OUTPUT_VARIABLE SYSTEMD_DIR)
-	endif()
-	if(SYSTEMD_DIR STREQUAL "")
-		message(FATAL_ERROR "Systemd is enabled, "
-			"but the unit dir can't be found.")
-	endif()
 	install(FILES "${PROJECT_BINARY_DIR}/znc.service"
-		DESTINATION "${SYSTEMD_DIR}")
+		DESTINATION "${CMAKE_INSTALL_LIBDIR}/systemd/system")
 endif()
 
 # On cygwin, if to link modules against znc.exe directly, modperl can't call
